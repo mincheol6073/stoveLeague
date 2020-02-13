@@ -26,12 +26,13 @@ public class ChatRoom {
     private String name;
     @Column(name = "room_date")
     private String date;
+    private String done;
 
     public static ChatRoom create(String name) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
         chatRoom.name = name;
-
+        chatRoom.done = "No";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         chatRoom.date = dateFormat.format(new Date());
 

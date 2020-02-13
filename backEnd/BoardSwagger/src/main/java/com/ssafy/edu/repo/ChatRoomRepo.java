@@ -8,4 +8,6 @@ import com.ssafy.edu.model.ChatRoom;
 @Repository
 public interface ChatRoomRepo extends JpaRepository<ChatRoom, String>{
 
+	ChatRoom findOneByRoomId(String roomId);
+
 }
