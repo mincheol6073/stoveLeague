@@ -1,7 +1,11 @@
 package com.websocket.chat.service;
 
-import com.websocket.chat.model.Meet;
+import com.websocket.chat.model.User;
+import com.websocket.chat.model.UserList;
+
+import java.util.List;
 
 public interface IMeetService {
-    void analyMeet(Meet meet);
+    List<UserList> getULByRoomId(String roomId);
+    List<User> getUserList();
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 @ToString
 @Getter
 @Setter
+
 public class ChatRoom {
     private String roomId;
     private String name;
