@@ -1,16 +1,17 @@
-package com.websocket.chat.model;
+package com.ssafy.edu.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @ToString
 @Getter

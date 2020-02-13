@@ -1,13 +1,14 @@
-package com.websocket.chat.model;
-
-import lombok.*;
+package com.ssafy.edu.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-//@AllArgsConstructor
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @NoArgsConstructor
 @Getter
 @Setter

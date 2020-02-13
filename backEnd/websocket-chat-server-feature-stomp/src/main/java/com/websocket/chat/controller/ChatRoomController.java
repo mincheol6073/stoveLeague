@@ -1,52 +1,66 @@
 package com.websocket.chat.controller;
 
+import com.websocket.chat.model.response.BaseResponse;
 import com.websocket.chat.model.ChatRoom;
 import com.websocket.chat.repo.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Controller
+//@Controller
+@RestController
 @RequestMapping("/chat")
 public class ChatRoomController {
 
         private final ChatRoomRepository chatRoomRepository;
 
-        @GetMapping("/room")
-        public String rooms(Model model) {
-            return "/chat/room";
-        }
+//        @GetMapping("/room")
+//        public String rooms(Model model) {
+//            return "/chat/room";
+//        }
 
-        @GetMapping("/rooms")
+        @GetMapping("/findAllRooms")
         @ResponseBody
-        public List<ChatRoom> room() {
-            return chatRoomRepository.findAllRoom();
+        public BaseResponse<List<ChatRoom>> room() {
+            List<ChatRoom> roomList = chatRoomRepository.findAllRoom();
+            BaseResponse<List<ChatRoom>> findAllRoomResponse = new BaseResponse<>();
+            findAllRoomResponse.setResultCode(200);
+            findAllRoomResponse.setResultMessage("Success");
+            findAllRoomResponse.setResultObject(roomList);
+            return findAllRoomResponse;
         }
 
         @PostMapping("/createRoom")
         @ResponseBody
-        public ChatRoom createRoom(@RequestParam String name) {
-            ChatRoom chatRoom = chatRoomRepository.createChatRoom(name);
+        public BaseResponse<ChatRoom> createRoom(@RequestParam ChatRoom createRequest) {
+            ChatRoom chatRoom = chatRoomRepository.createChatRoom(createRequest);
             log.info("Room {}",chatRoom);
-            return chatRoom;
+            BaseResponse<ChatRoom> createResponse = new BaseResponse<>();
+            createResponse.setResultCode(200);
+            createResponse.setResultMessage("Success");
+            createResponse.setResultObject(chatRoom);
+            // db에 추가 필요
+            return createResponse;
         }
 
-        @GetMapping("/room/enter/{roomId}")
-        public String roomDetail(Model model, @PathVariable String roomId) {
-            model.addAttribute("roomId", roomId);
-            return "/chat/roomdetail";
+        @GetMapping("/enterRoom/{roomId}")
+        public BaseResponse<String> enterRoom(@PathVariable String roomId) {
+//            model.addAttribute("roomId", roomId);
+            BaseResponse<String> enterResponse = new BaseResponse<>();
+            enterResponse.setResultCode(204);
+            enterResponse.setResultMessage("Success");
+            enterResponse.setResultObject("No Content");
+            return enterResponse;
         }
 
-    @GetMapping("/room/{roomId}")
-    @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
-    }
+        @GetMapping("/room/{roomId}")
+        @ResponseBody
+        public ChatRoom roomInfo(@PathVariable String roomId) {
+            return chatRoomRepository.findRoomById(roomId);
+        }
 }
