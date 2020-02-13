@@ -1,12 +1,11 @@
 package com.example.stoveleague.util;
 
 import android.util.Log;
-import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.client.StompClient;
 
 
 public class StompUtils {
     public static final String TAG = "jaewoong";
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "CheckResult"})
     public static void lifecycle(StompClient stompClient) {
         stompClient.lifecycle().subscribe(lifecycleEvent -> {
             switch (lifecycleEvent.getType()) {

@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.stoveleague.R;
 
-public class ChatListActivity extends AppCompatActivity {
+public class MessageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_list);
+        setContentView(R.layout.activity_message);
     }
 }

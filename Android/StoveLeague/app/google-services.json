@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "645869493694",
+    "firebase_url": "https://stoveleague-1ee5a.firebaseio.com",
+    "project_id": "stoveleague-1ee5a",
+    "storage_bucket": "stoveleague-1ee5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645869493694:android:49f7b2a23556616bc22def",
+        "android_client_info": {
+          "package_name": "com.example.stoveleague"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645869493694-rng4cecq6v2da058o3hrdmjgt37c0koj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stoveleague",
+            "certificate_hash": "bdd277b4264412e29632074a360e7b108cfb44af"
+          }
+        },
+        {
+          "client_id": "645869493694-hlbatrd9m7n4um6nml6f0v5viaah3hdo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLu-rcR3faGBD1tkJQFg6XwSzBI9duKQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645869493694-hlbatrd9m7n4um6nml6f0v5viaah3hdo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

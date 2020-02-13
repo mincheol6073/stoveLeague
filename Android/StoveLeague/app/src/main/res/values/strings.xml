@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">StoveLeague</string>
     <string name="title_activity_content">ContentActivity</string>
+    <string name="server_ip">http://10.83.32.193</string>
 </resources>

@@ -1,7 +1,7 @@
 package com.example.stoveleague.data;
 
 public class Const {
-    public static final String TAG = "jaewoong";
+    public static final String TAG = "";
     public static final String placeholder = "placeholder";
 
     /**
@@ -11,7 +11,7 @@ public class Const {
      * If you are using your own phone, just change the server address and port.
      */
     // private static final String address = "ws://10.0.2.2:8080/im/websocket";
-    public static final String address = "ws://192.168.0.38:8080/im/websocket";
+    public static final String address = "ws://10.83.32.193:8080/stove";
 
     public static final String broadcast = "/broadcast";
     public static final String broadcastResponse = "/b";
