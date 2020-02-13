@@ -28,3 +28,29 @@ tmp/**/*
 *.bak
 local.properties
 /src/main/resources/rebel.xml
+
+# Log Files
+*.log
+
+# Android Studio
+/*/build/
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
+captures/
+.navigation/
+*.ipr
+*~
+*.swp
+
+# Android Patch
+gen-external-apklibs
+
+# External native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild
+
+# NDK
+obj/
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
