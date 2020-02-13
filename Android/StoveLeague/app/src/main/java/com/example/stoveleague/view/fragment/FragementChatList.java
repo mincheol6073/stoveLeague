@@ -42,15 +42,16 @@ import retrofit2.Response;
 
 public class FragementChatList extends Fragment {
     private SharedPreferences prefs;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frame_chatlist,container,false);
+        View view = inflater.inflate(R.layout.frame_chatlist, container, false);
 
         FloatingActionButton mbtnCreate = (FloatingActionButton) view.findViewById(R.id.btn_Create);
         RecyclerView recyclerView = view.findViewById(R.id.recycleView_chatlist);
         recyclerView.setAdapter(new ChatRoomRecyclerViewAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-       mbtnCreate.setOnClickListener(new View.OnClickListener() {
+        mbtnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), CreateChatActivity.class);
@@ -61,74 +62,66 @@ public class FragementChatList extends Fragment {
         return view;
     }
 
-    class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         List<ChatRoomModel> chatRooms;
+        private List<String> keys = new ArrayList<>();
         //생성자
         private FirebaseAuth mAuth;
         private RetrofitInterface retroConn;
         private String userID;
-        public ChatRoomRecyclerViewAdapter(){
+
+        public ChatRoomRecyclerViewAdapter() {
             prefs = getActivity().getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-            userID = prefs.getString("email","");
+            userID = prefs.getString("encode_emails", "");
             chatRooms = new ArrayList<>();
-//            notifyDataSetChanged();
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            DatabaseReference myRef = database.getReference("chatrooms");
-//            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    for(DataSnapshot item : dataSnapshot.getChildren()){
-//                        Log.d("!",item.getValue(ChatRoomModel.class).getName()+"//"+item.getValue(ChatRoomModel.class).getRoomId());
-//                    }
-//                    String value = dataSnapshot.getValue(String.class);
-//                    Log.d("!", "Value is: " + value);
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-            /*
-            // 통신하는 곳
-            retroConn =  RetrofiConnection.getClient().create(RetrofitInterface.class);
-            Call<ChatRoomModel> call = retroConn.createChatRoom("1234");
-            call.enqueue(new Callback<ChatRoomModel>() {
+            FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/" + userID).equalTo(true).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onResponse(Call<ChatRoomModel> call, Response<ChatRoomModel> response) {
-                    //chatroom clear
-                    Log.d("dfsdf",response.body().toString());
-                    //여기에 Chatroom넣어주기
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    chatRooms.clear();
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        chatRooms.add(item.getValue(ChatRoomModel.class));
+                        Log.d("!@",item.getKey());
+                        keys.add(item.getKey());
+                    }
+                    notifyDataSetChanged();
                 }
 
                 @Override
-                public void onFailure(Call<ChatRoomModel> call, Throwable t) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });*/
+            });
 
         }
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chatroom,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chatroom, parent, false);
+
+
             return new CustomViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
+            final CustomViewHolder customViewHolder = (CustomViewHolder) holder;
+            String destinationUid = null;
+            for (String user : chatRooms.get(position).getUsers().keySet()) {
+                if(!user.equals((userID))){
+                    destinationUid = user;
+                }
+            }
         }
 
         @Override
         public int getItemCount() {
             return chatRooms.size();
         }
-        private class CustomViewHolder extends RecyclerView.ViewHolder{
+        private class CustomViewHolder extends RecyclerView.ViewHolder {
             public ImageView imageView;
             public TextView textview;
-            public CustomViewHolder(View view){
+            public CustomViewHolder(View view) {
                 super(view);
                 imageView = (ImageView) view.findViewById(R.id.imgview_chatroom);
                 textview = (TextView) view.findViewById(R.id.txtview_chatroom);

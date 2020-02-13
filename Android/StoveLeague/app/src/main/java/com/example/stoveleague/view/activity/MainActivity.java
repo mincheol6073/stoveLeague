@@ -1,5 +1,6 @@
 package com.example.stoveleague.view.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -16,8 +17,15 @@ import android.widget.Toast;
 import com.example.stoveleague.R;
 import com.example.stoveleague.data.BaseResponse;
 import com.example.stoveleague.data.ChatRoomModel;
+import com.example.stoveleague.data.UserModel;
 import com.example.stoveleague.util.RetrofiConnection;
 import com.example.stoveleague.util.RetrofitInterface;
+import com.example.stoveleague.util.StrUtils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
@@ -67,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     private static class NaverLoginHandler extends OAuthLoginHandler {
         private MainActivity mainactivity;
         private final WeakReference<MainActivity> mActivity;
@@ -96,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         class RequestAPI extends AsyncTask<String, Void, String> {
             private String result;
             private RetrofitInterface retroConn;
+            private boolean isGo = false;
             @Override
             protected String doInBackground(String... strings) {
                 String token = strings[0];
@@ -132,37 +143,52 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject object = new JSONObject(result);
                     if (object.getString("resultcode").equals("00")) {
+
                         JSONObject jsonObject = new JSONObject(object.getString("response"));
                         Log.d("jsonObject", jsonObject.toString());
+
                         SharedPreferences.Editor editor = mainactivity.userData.edit();
                         editor.putString("email", jsonObject.getString("email"));
                         editor.putString("name", jsonObject.getString("name"));
 //                        editor.putString("nickname", jsonObject.getString("nickname"));
                         editor.putString("profile", jsonObject.getString("profile_image"));
+                        editor.putString("encode_email", StrUtils.EncodeString(jsonObject.getString("email")));
+                        editor.putString("encode_name", StrUtils.EncodeString(jsonObject.getString("name")));
+                        editor.putString("encode_profile", StrUtils.EncodeString(jsonObject.getString("profile_image")));
                         editor.apply();
-
-                        retroConn =  RetrofiConnection.getClient().create(RetrofitInterface.class);
+                        String uid = StrUtils.EncodeString(jsonObject.getString("email"));
+                        UserModel userModel = new UserModel(StrUtils.EncodeString(jsonObject.getString("profile_image")), StrUtils.EncodeString(jsonObject.getString("email")), jsonObject.getString("name"));
                         final ProgressDialog progressDoalog;
-                        ProgressBar loadProgress = (ProgressBar)mainactivity.findViewById(R.id.progressBar);
+                        ProgressBar loadProgress = (ProgressBar) mainactivity.findViewById(R.id.progressBar);
                         loadProgress.setVisibility(View.VISIBLE);
-                        Call<BaseResponse> call = retroConn.joinUser(jsonObject.getString("email"),jsonObject.getString("name"));
-                        call.enqueue(new retrofit2.Callback<BaseResponse>() {
+
+                        FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                                Log.d("MainActivity" ,"완료");
-                                Toast.makeText(mainactivity, "로그인에 성공했습니다.", Toast.LENGTH_SHORT).show();
-                                loadProgress.setVisibility(View.GONE);
-                                Intent intent = new Intent(mainactivity, ContentActivity.class);
-                                mainactivity.startActivity(intent);
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot item : dataSnapshot.getChildren()) {
+                                    if (item.getValue(UserModel.class).getUserId().equals(uid)) {
+                                        loadProgress.setVisibility(View.GONE);
+                                        isGo= true;
+                                        return;
+                                    }
+                                }
                             }
                             @Override
-                            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                                Log.d("MainActivity" ,"에러");
-                                mOAuthLoginModule.logout(mainactivity);
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
                                 loadProgress.setVisibility(View.GONE);
-                                Toast.makeText(mainactivity, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();
                             }
                         });
+                        //파이어 배이스 연결 하자
+                        if(!isGo){
+                            FirebaseDatabase.getInstance().getReference().child("users").child(StrUtils.EncodeString(jsonObject.getString("email"))).setValue(userModel);
+                            isGo= true;
+                        }
+                        if(isGo){
+                            loadProgress.setVisibility(View.GONE);
+                            Intent intent = new Intent(mainactivity, ContentActivity.class);
+                            mainactivity.startActivity(intent);
+                        }
+
 
 
                     }

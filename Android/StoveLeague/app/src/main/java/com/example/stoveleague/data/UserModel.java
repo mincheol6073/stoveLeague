@@ -1,42 +1,42 @@
 package com.example.stoveleague.data;
 
 public class UserModel {
-    private String email;
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
 
     public UserModel() {
     }
 
-    public UserModel(String email, String name, String profile) {
-        this.email = email;
-        this.name = name;
-        this.profile = profile;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public UserModel(String userProfile, String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userProfile = userProfile;
     }
 
-    public String getName() {
-        return name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUserProfile() {
+        return userProfile;
     }
 
-    public String getProfile() {
-        return profile;
+    public void setUserProfile(String userProfile) {
+        this.userProfile = userProfile;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
-
-    private String name;
-    private String profile;
+    private String userName;
+    private String userProfile;
 
 }
