@@ -22,13 +22,15 @@ public class ChatRoom {
     @Id
     @Column(name = "room_id")
     private String roomId;
+    @Column(name = "room_name")
     private String name;
+    @Column(name = "room_date")
     private String date;
 
-    public static ChatRoom create(ChatRoom createRequest) {
+    public static ChatRoom create(String name) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = createRequest.getName();
+        chatRoom.name = name;
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         chatRoom.date = dateFormat.format(new Date());
